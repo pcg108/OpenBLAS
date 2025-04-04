@@ -78,7 +78,7 @@ int CNAME(blas_arg_t *args, BLASLONG *range_m, BLASLONG *range_n, FLOAT *sa, FLO
 #if !((defined(UPPER) && !defined(TRANSA)) || (!defined(UPPER) && defined(TRANSA)))
   BLASLONG start_ls;
 #endif
-
+printf("\tName:%s\n", __func__);
   m = args -> m;
   n = args -> n;
 

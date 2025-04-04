@@ -920,12 +920,12 @@ extern int gotoblas_profile;
 #define FUNCTION_PROFILE_END(COMP, AREA, OPS)
 #endif
 
-#if 1
+#ifdef nDEBUG_PRINT_NAME
 #define PRINT_DEBUG_CNAME
 #define PRINT_DEBUG_NAME
 #else
-#define PRINT_DEBUG_CNAME if (readenv_atoi("GOTO_DEBUG")) fprintf(stderr, "GotoBLAS : %s\n", CHAR_CNAME)
-#define PRINT_DEBUG_NAME  if (readenv_atoi("GOTO_DEBUG")) fprintf(stderr, "GotoBLAS : %s\n", CHAR_NAME)
+#define PRINT_DEBUG_CNAME if (readenv_atoi("GOTO_DEBUG")) fprintf(stdout, "GotoBLAS cname: %s\n", CHAR_CNAME);
+#define PRINT_DEBUG_NAME  if (readenv_atoi("GOTO_DEBUG")) fprintf(stdout, "GotoBLAS name : %s\n", CHAR_NAME);
 #endif
 
 #ifdef __cplusplus
