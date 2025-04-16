@@ -1358,6 +1358,14 @@ endif ()
         "#define DTB_DEFAULT_ENTRIES 128\n"
         "#define DTB_SIZE 4096\n"
         "#define L2_ASSOCIATIVE 4\n")
+        set(SGEMM_UNROLL_M 8)
+        set(SGEMM_UNROLL_N 4)
+        set(DGEMM_UNROLL_M 8)
+        set(DGEMM_UNROLL_N 4)
+        set(CGEMM_UNROLL_M 8)
+        set(CGEMM_UNROLL_N 4)
+        set(ZGEMM_UNROLL_M 4)
+        set(ZGEMM_UNROLL_N 4)
     elseif ("${TCORE}" STREQUAL "RISCV64_ZVL256B")
         file(APPEND ${TARGET_CONF_TEMP}
             "#define L1_DATA_SIZE 32768\n"
