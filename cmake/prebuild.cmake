@@ -1359,7 +1359,7 @@ endif ()
         "#define DTB_SIZE 4096\n"
         "#define L2_ASSOCIATIVE 4\n")
         set(SGEMM_UNROLL_M 8)
-        set(SGEMM_UNROLL_N 4)
+        set(SGEMM_UNROLL_N 8)
         set(DGEMM_UNROLL_M 8)
         set(DGEMM_UNROLL_N 4)
         set(CGEMM_UNROLL_M 8)
@@ -1375,6 +1375,14 @@ endif ()
           "#define DTB_DEFAULT_ENTRIES 128\n"
           "#define DTB_SIZE 4096\n"
           "#define L2_ASSOCIATIVE 4\n")
+        set(SGEMM_UNROLL_M 16)
+        set(SGEMM_UNROLL_N 8)
+        set(DGEMM_UNROLL_M 8)
+        set(DGEMM_UNROLL_N 8)
+        set(CGEMM_UNROLL_M 8)
+        set(CGEMM_UNROLL_N 8)
+        set(ZGEMM_UNROLL_M 8)
+        set(ZGEMM_UNROLL_N 4)
   elseif ("${TCORE}" STREQUAL "LA64_GENERIC")
     file(APPEND ${TARGET_CONF_TEMP}
       "#define DTB_DEFAULT_ENTRIES 64\n")
