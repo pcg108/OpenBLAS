@@ -1092,7 +1092,6 @@ static void matmul_cpu(bool transA, bool transB, size_t DIM_I, size_t DIM_J, siz
         //   acc_t qp = q + z * qln2;
         //   acc_t q_exp = (qp + qb)*(qp + qb) + qc;
         //   c_buffer[j] = q_exp >> z;
-            throw;
           sum_exp += c_buffer[j];
         }
 

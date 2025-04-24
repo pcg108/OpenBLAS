@@ -220,6 +220,10 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
   }
 }
 
+#if defined(GEMMINI_BACKEND) && !defined(DOUBLE)
+#include "gemmini/gemmini.h"
+#endif
+
 #ifndef CBLAS
 
 void NAME(char *TRANSA, char *TRANSB,
@@ -661,7 +665,22 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
  if (args.nthreads == 1) {
 #endif
 
+// printf("gemm[%s]: m: %d, n: %d, k: %d, lda: %d, ldb: %d, ldc: %d, alpha: %f, beta: %f, transA: %d, transB: %d\n",
+//     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
+#if defined(GEMMINI_BACKEND) && !defined(DOUBLE)
+    gemmini_flush(0);
+    tiled_matmul_auto(
+        args.n, args.m, args.k,
+        args.b, args.a /* .a is colMjr */, args.c, args.c,
+        args.ldb, args.lda, args.lda, args.lda,
+        *(FLOAT *)(args.alpha), 1, *(FLOAT *)(args.beta),
+        NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+        transb, transa, 
+        false, false, 0, WS
+    );
+#else
     (gemm[(transb << 2) | transa])(&args, NULL, NULL, sa, sb, 0);
+#endif
 
 #ifdef SMP
 
