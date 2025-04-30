@@ -686,15 +686,15 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     float* c_buf = malloc(args.m * args.n * sizeof(float));
     for (int i = 0; i < args.m*args.k; i++)
     {
-        a_buf[i] = (float)args.a[i];
+        a_buf[i] = (float)((IFLOAT*)args.a)[i];
     }
     for (int i = 0; i < args.k*args.n; i++)
     {
-        b_buf[i] = (float)args.b[i];
+        b_buf[i] = (float)((IFLOAT*)args.b)[i];
     }
     for (int i = 0; i < args.m*args.n; i++)
     {
-        c_buf[i] = (float)args.c[i];
+        c_buf[i] = (float)((IFLOAT*)args.c)[i];
     }
 
     gemmini_flush(0);
@@ -710,7 +710,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 
     for (int i = 0; i < args.m*args.n; i++)
     {
-        args.c[i] = (double)c_buf[i];
+        ((IFLOAT*)args.c)[i] = (double)c_buf[i];
     }
 
 #endif
