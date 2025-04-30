@@ -700,7 +700,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     gemmini_flush(0);
     tiled_matmul_auto(
         args.n, args.m, args.k,
-        args.b, args.a /* .a is colMjr */, args.c, args.c,
+        b_buf, a_buf /* .a is colMjr */, c_buf, c_buf,
         args.ldb, args.lda, args.lda, args.lda,
         *(FLOAT *)(args.alpha), 1, *(FLOAT *)(args.beta),
         NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
