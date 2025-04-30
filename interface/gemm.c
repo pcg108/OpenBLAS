@@ -220,7 +220,7 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
   }
 }
 
-#if defined(GEMMINI_BACKEND) && !defined(DOUBLE)
+#if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
 #endif
 
@@ -667,7 +667,9 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 
 // printf("gemm[%s]: m: %d, n: %d, k: %d, lda: %d, ldb: %d, ldc: %d, alpha: %f, beta: %f, transA: %d, transB: %d\n",
 //     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
-#if defined(GEMMINI_BACKEND) && !defined(DOUBLE)
+#if defined(GEMMINI_BACKEND)
+
+#if !defined(DOUBLE)
     gemmini_flush(0);
     tiled_matmul_auto(
         args.n, args.m, args.k,
@@ -678,6 +680,40 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
         transb, transa, 
         false, false, 0, WS
     );
+#else
+    float* a_buf = malloc(args.m * args.k * sizeof(float));
+    float* b_buf = malloc(args.k * args.n * sizeof(float));
+    float* c_buf = malloc(args.m * args.n * sizeof(float));
+    for (int i = 0; i < args.m*args.k; i++)
+    {
+        a_buf[i] = (float)a[i];
+    }
+    for (int i = 0; i < args.k*args.n; i++)
+    {
+        b_buf[i] = (float)b[i];
+    }
+    for (int i = 0; i < args.m*args.n; i++)
+    {
+        c_buf[i] = (float)c[i];
+    }
+
+    gemmini_flush(0);
+    tiled_matmul_auto(
+        args.n, args.m, args.k,
+        args.b, args.a /* .a is colMjr */, args.c, args.c,
+        args.ldb, args.lda, args.lda, args.lda,
+        *(FLOAT *)(args.alpha), 1, *(FLOAT *)(args.beta),
+        NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+        transb, transa, 
+        false, false, 0, WS
+    );
+
+    for (int i = 0; i < args.m*args.n; i++)
+    {
+        c[i] = (double)c_buf[i];
+    }
+
+#endif
 #else
     (gemm[(transb << 2) | transa])(&args, NULL, NULL, sa, sb, 0);
 #endif

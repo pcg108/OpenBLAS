@@ -93,6 +93,10 @@ static inline int get_gemv_optimal_nthreads(BLASLONG MN) {
     return num_cpu_avail(2);
 }
 
+#if defined(GEMMINI_BACKEND)
+#include "gemmini/gemmini.h"
+#endif
+
 #ifndef CBLAS
 
 void NAME(char *TRANS, blasint *M, blasint *N,
@@ -260,7 +264,55 @@ void CNAME(enum CBLAS_ORDER order,
   if (nthreads == 1) {
 #endif
 
+#if defined(GEMMINI_BACKEND)
+#if !defined(DOUBLE)
+    gemmini_flush(0);
+    tiled_matmul_auto(
+        1, m, n,
+        x, a /* .a is colMjr */, y, y,
+        1, lda, lda, lda,
+        alpha, 1, beta,
+        NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+        false, trans,
+        false, false, 0, WS
+    );
+#else
+    float* a_buf = malloc(m * n * sizeof(float));
+    float* x_buf = malloc(n * sizeof(float));
+    float* y_buf = malloc(m * sizeof(float));
+    for (int i = 0; i < m*n; i++)
+    {
+        a_buf[i] = (float)a[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        x_buf[i] = (float)x[i];
+    }
+    for (int i = 0; i < m; i++)
+    {
+        y_buf[i] = (float)y[i];
+    }
+
+    gemmini_flush(0);
+    tiled_matmul_auto(
+        1, m, n,
+        x_buf, a_buf /* .a is colMjr */, y_buf, y_buf,
+        1, lda, lda, lda,
+        alpha, 1, beta,
+        NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+        false, trans,
+        false, false, 0, WS
+    );
+
+    for (int i = 0; i < m; i++)
+    {
+        y[i] = (double)y_buf[i];
+    }
+
+#endif
+#else
     (gemv[(int)trans])(m, n, 0, alpha, a, lda, x, incx, y, incy, buffer);
+#endif
 
 #ifdef SMP
   } else {
