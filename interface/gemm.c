@@ -684,34 +684,78 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     float* a_buf = malloc(args.m * args.k * sizeof(float));
     float* b_buf = malloc(args.k * args.n * sizeof(float));
     float* c_buf = malloc(args.m * args.n * sizeof(float));
-    for (int i = 0; i < args.m*args.k; i++)
+
+    if (transa)
     {
-        a_buf[i] = (float)((IFLOAT*)args.a)[i];
+        for (int i = 0; i < args.m; i++)
+        {
+            for (int j = 0; j < args.k; j++)
+            {
+                a_buf[i * args.k + j] = (float)((IFLOAT*)args.a)[i * args.lda + j];
+            }
+        }
     }
-    for (int i = 0; i < args.k*args.n; i++)
+    else
     {
-        b_buf[i] = (float)((IFLOAT*)args.b)[i];
+        for (int i = 0; i < args.k; i++)
+        {
+            for (int j = 0; j < args.m; j++)
+            {
+                a_buf[i * args.m + j] = (float)((IFLOAT*)args.a)[i * args.lda + j];
+            }
+        }
     }
-    for (int i = 0; i < args.m*args.n; i++)
+
+    if (transb)
     {
-        c_buf[i] = (float)((IFLOAT*)args.c)[i];
+        for (int i = 0; i < args.k; i++)
+        {
+            for (int j = 0; j < args.n; j++) 
+            {
+                b_buf[i * args.n + j] = (float)((IFLOAT*)args.b)[i * args.ldb + j];
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < args.n; i++)
+        {
+            for (int j = 0; j < args.k; j++) 
+            {
+                b_buf[i * args.k + j] = (float)((IFLOAT*)args.b)[i * args.ldb + j];
+            }
+        }
+    }
+    for (int i = 0; i < args.n; i++)
+    {
+        for (int j = 0; j < args.m; j++)
+        {
+            c_buf[i * args.m + j] = (float)((IFLOAT*)args.c)[i * args.ldc + j];
+        }
     }
 
     gemmini_flush(0);
     tiled_matmul_auto(
         args.n, args.m, args.k,
         b_buf, a_buf /* .a is colMjr */, c_buf, c_buf,
-        args.ldb, args.lda, args.lda, args.lda,
+        transb?args.n:args.k, transa?args.k:args.m, args.m, args.m,
         *(FLOAT *)(args.alpha), 1, *(FLOAT *)(args.beta),
         NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
         transb, transa, 
         false, false, 0, WS
     );
 
-    for (int i = 0; i < args.m*args.n; i++)
+    for (int i = 0; i < args.n; i++)
     {
-        ((IFLOAT*)args.c)[i] = (double)c_buf[i];
+        for (int j = 0; j < args.m; j++)
+        {
+            ((IFLOAT*)args.c)[i * args.ldc + j] = (IFLOAT)c_buf[i * args.m + j];
+        }
     }
+
+    free(a_buf);
+    free(b_buf);
+    free(c_buf);
 
 #endif
 #else
