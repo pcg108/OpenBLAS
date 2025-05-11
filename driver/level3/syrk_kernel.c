@@ -64,7 +64,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG k, FLOAT alpha_r,
   FLOAT *cc, *ss;
   FLOAT subbuffer[GEMM_UNROLL_MN * (GEMM_UNROLL_MN + 1) * COMPSIZE];
 
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   if (m + offset < 0) {
 #ifndef LOWER
     GEMM_KERNEL(m, n, k,

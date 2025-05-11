@@ -196,7 +196,7 @@ int CNAME(blas_arg_t *args, BLASLONG *range_m, BLASLONG *range_n,
   unsigned long long kernelcost = 0;
   double total;
 #endif
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   k = K;
 
   a = (IFLOAT *)A;

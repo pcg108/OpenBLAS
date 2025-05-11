@@ -52,7 +52,7 @@ int CNAME(BLASLONG M, BLASLONG N, BLASLONG K, FLOAT alpha, FLOAT* A, FLOAT* B, F
     BLASLONG gvl = 0;
     BLASLONG m_top = 0;
     BLASLONG n_top = 0;
-    printf("\tName:%s\n", __func__);
+    //  printf("\tName:%s\n", __func__);
 
     // -- MAIN PASS
 

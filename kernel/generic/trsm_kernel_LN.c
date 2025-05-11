@@ -195,7 +195,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG k,  FLOAT dummy1,
   fprintf(stderr, "TRSM KERNEL LN : m = %3ld  n = %3ld  k = %3ld offset = %3ld\n",
 	  m, n, k, offset);
 #endif
-    printf("\tName:%s\n", __func__);
+    //  printf("\tName:%s\n", __func__);
   j = (n >> GEMM_UNROLL_N_SHIFT);
 
   while (j > 0) {

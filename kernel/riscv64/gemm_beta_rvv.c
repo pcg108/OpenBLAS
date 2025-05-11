@@ -53,7 +53,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT beta,
     FLOAT *c_offset;
 	size_t vl;
     FLOAT_V_T vx;
-    printf("\tName:%s\n", __func__);
+    //  printf("\tName:%s\n", __func__);
 
     if (beta == ZERO) {
 

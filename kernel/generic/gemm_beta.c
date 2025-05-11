@@ -46,7 +46,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT beta,
   BLASLONG i, j;
   BLASLONG chunk, remain;
   FLOAT *c_offset1, *c_offset;
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   c_offset = c;
   chunk = m >> 3;
   remain = m & 7;

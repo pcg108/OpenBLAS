@@ -45,7 +45,7 @@ int CNAME(BLASLONG m, BLASLONG n, IFLOAT *a, BLASLONG lda, IFLOAT *b){
   IFLOAT *a_offset, *a_offset1, *a_offset2;
   IFLOAT *b_offset, *b_offset1, *b_offset2;
 
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   a_offset = a;
   b_offset = b;
   b_offset2 = b + m * (n & ~1);

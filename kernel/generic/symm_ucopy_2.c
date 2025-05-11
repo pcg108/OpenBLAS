@@ -45,7 +45,7 @@ int CNAME(BLASLONG m, BLASLONG n, FLOAT *a, BLASLONG lda, BLASLONG posX, BLASLON
 
   FLOAT data01, data02;
   FLOAT *ao1, *ao2;
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   js = (n >> 1);
   while (js > 0){
 

@@ -47,7 +47,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLONG lda, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y, FLOAT *buffer)
 {
-    printf("\tName:%s\n", __func__);
+    //  printf("\tName:%s\n", __func__);
     if(n < 0)  return(0);
 
     FLOAT *a_ptr, *x_ptr;

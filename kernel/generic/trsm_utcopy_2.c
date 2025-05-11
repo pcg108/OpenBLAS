@@ -51,7 +51,7 @@ int CNAME(BLASLONG m, BLASLONG n, FLOAT *a, BLASLONG lda, BLASLONG offset, FLOAT
 
   FLOAT data01, data02, data03, data04;
   FLOAT *a1, *a2;
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   jj = offset;
 
   j = (n >> 1);

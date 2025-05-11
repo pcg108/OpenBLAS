@@ -27,7 +27,7 @@ int CNAME(BLASLONG bm,BLASLONG bn,BLASLONG bk,FLOAT alpha,IFLOAT* ba,IFLOAT* bb,
    IFLOAT *ptrba,*ptrbb;
    FLOAT res0,res1,res2,res3;
    IFLOAT load0,load1,load2,load3,load4,load5,load6,load7;
-   printf("\tName:%s\n", __func__);
+   //  printf("\tName:%s\n", __func__);
    for (j=0; j<bn/2; j+=1)
      {
         C0 = C;

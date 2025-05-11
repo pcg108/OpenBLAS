@@ -45,7 +45,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 	BLASLONG j;
 	FLOAT *a_ptr;
 	FLOAT temp;
-    printf("\tName:%s\n", __func__);
+    //  printf("\tName:%s\n", __func__);
 	ix = 0;
 	a_ptr = a;
 

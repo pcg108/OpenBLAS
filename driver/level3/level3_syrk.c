@@ -107,7 +107,7 @@ int CNAME(blas_arg_t *args, BLASLONG *range_m, BLASLONG *range_n, FLOAT *sa, FLO
   BLASLONG min_l, min_i, min_j;
   BLASLONG jjs, min_jj;
   BLASLONG m_start, m_end;
-  printf("\tName:%s\n", __func__);
+  //  printf("\tName:%s\n", __func__);
   int shared = ((GEMM_UNROLL_M == GEMM_UNROLL_N) && !HAVE_EX_L2);
 
   FLOAT *aa;
