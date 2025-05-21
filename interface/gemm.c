@@ -222,6 +222,8 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
 
 #if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
+#include <pthread.h>
+pthread_mutex_t gemmini_lock = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 #ifndef CBLAS
@@ -669,6 +671,8 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 //     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
 #if defined(GEMMINI_BACKEND)
 
+pthread_mutex_lock(&gemmini_lock);
+
 #if !defined(DOUBLE)
     gemmini_flush(0);
     tiled_matmul_auto(
@@ -756,6 +760,8 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     free(a_buf);
     free(b_buf);
     free(c_buf);
+
+pthread_mutex_unlock(&gemmini_lock);
 
 #endif
 #else
