@@ -275,10 +275,10 @@ endif()
 add_library(gemmini_lock gemmini/gemmini_lock.c)
 if(BUILD_STATIC_LIBS)
     target_link_libraries(${OpenBLAS_LIBNAME}_static gemmini_lock)
-  endif()
-  if(BUILD_SHARED_LIBS)
-    target_link_libraries(${OpenBLAS_LIBNAME}_shared gemmini_lock)
-  endif()
+endif()
+if(BUILD_SHARED_LIBS)
+  target_link_libraries(${OpenBLAS_LIBNAME}_shared gemmini_lock)
+endif()
 
 
 if (USE_OPENMP)
@@ -552,6 +552,13 @@ endif()
 
 
 # Install project
+
+install(TARGETS gemmini_lock
+    EXPORT "OpenBLAS${SUFFIX64}Targets"
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
 
 # Install libraries
 if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
