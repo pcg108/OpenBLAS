@@ -13,6 +13,7 @@ set(OpenBLAS_PATCH_VERSION 29.dev)
 
 set(OpenBLAS_VERSION "${OpenBLAS_MAJOR_VERSION}.${OpenBLAS_MINOR_VERSION}.${OpenBLAS_PATCH_VERSION}")
 
+<<<<<<< HEAD
 #set(RVV_ARCH_FLAGS "-march=rv64gc -mabi=lp64d")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${RVV_ARCH_FLAGS}")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${RVV_ARCH_FLAGS}")
@@ -23,6 +24,11 @@ set(BUILD_WITHOUT_LAPACK ON)
 set(BUILD_BENCHMARKS OFF)
 #set(TARGET "RISCV64_GENERIC")
 -DGEMMINI_BACKEND
+=======
+# set(RVV_ARCH_FLAGS "-march=rv64gc -mabi=lp64d")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${RVV_ARCH_FLAGS}")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${RVV_ARCH_FLAGS}")
+>>>>>>> refs/remotes/origin/develop
 
 # Adhere to GNU filesystem layout conventions
 include(GNUInstallDirs)
