@@ -222,8 +222,7 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
 
 #if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
-#include <pthread.h>
-pthread_mutex_t gemmini_lock = PTHREAD_MUTEX_INITIALIZER;
+#include "gemmini/gemmini_lock.h"
 #endif
 
 #ifndef CBLAS

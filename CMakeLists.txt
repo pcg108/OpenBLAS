@@ -271,6 +271,16 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "AIX|Android|Linux|FreeBSD|OpenBSD|NetBSD|Drago
   endif()
 endif()
 
+
+add_library(gemmini_lock gemmini/gemmini_lock.c)
+if(BUILD_STATIC_LIBS)
+    target_link_libraries(${OpenBLAS_LIBNAME}_static gemmini_lock)
+  endif()
+  if(BUILD_SHARED_LIBS)
+    target_link_libraries(${OpenBLAS_LIBNAME}_shared gemmini_lock)
+  endif()
+
+
 if (USE_OPENMP)
   if(BUILD_STATIC_LIBS)
     target_link_libraries(${OpenBLAS_LIBNAME}_static OpenMP::OpenMP_C)

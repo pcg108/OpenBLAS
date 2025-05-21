@@ -93,11 +93,12 @@ static inline int get_gemv_optimal_nthreads(BLASLONG MN) {
     return num_cpu_avail(2);
 }
 
-/*
+
 #if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
+#include "gemmini/gemmini_lock.h"
 #endif
-*/
+
 
 #ifndef CBLAS
 
@@ -267,76 +268,79 @@ void CNAME(enum CBLAS_ORDER order,
 #endif
 
 
-// #if defined(GEMMINI_BACKEND)
+#if defined(GEMMINI_BACKEND)
+pthread_mutex_lock(&gemmini_lock);
 
-// #if !defined(DOUBLE)
-//     gemmini_flush(0);
-//     tiled_matmul_auto(
-//         1, m, n,
-//         x, a /* .a is colMjr */, y, y,
-//         1, lda, lda, lda,
-//         alpha, 1, beta,
-//         NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
-//         false, trans,
-//         false, false, 0, WS
-//     );
-// #else
-//     float* a_buf = malloc(m * n * sizeof(float));
-//     float* x_buf = malloc((trans? m : n) * sizeof(float));
-//     float* y_buf = malloc((trans?n:m) * sizeof(float));
-//     for (int i = 0; i < n; i++)
-//     {
-//         for (int j = 0; j < m; j++)
-//         {
-//             a_buf[i * m + j] = (float)a[i * lda + j];
-//         }
-//     }
-//     for (int i = 0; i < (trans? m : n); i++)
-//     {
-//         x_buf[i] = (float)x[i * incx];
-//     }
-//     for (int i = 0; i < (trans? n : m); i++)
-//     {
-//         y_buf[i] = (float)y[i * incy];
-//     }
+#if !defined(DOUBLE)
+    gemmini_flush(0);
+    tiled_matmul_auto(
+        1, m, n,
+        x, a /* .a is colMjr */, y, y,
+        1, lda, lda, lda,
+        alpha, 1, beta,
+        NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+        false, trans,
+        false, false, 0, WS
+    );
+#else
+    float* a_buf = malloc(m * n * sizeof(float));
+    float* x_buf = malloc((trans? m : n) * sizeof(float));
+    float* y_buf = malloc((trans?n:m) * sizeof(float));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            a_buf[i * m + j] = (float)a[i * lda + j];
+        }
+    }
+    for (int i = 0; i < (trans? m : n); i++)
+    {
+        x_buf[i] = (float)x[i * incx];
+    }
+    for (int i = 0; i < (trans? n : m); i++)
+    {
+        y_buf[i] = (float)y[i * incy];
+    }
 
-//     gemmini_flush(0);
+    gemmini_flush(0);
 
-//     if (trans) {
-//         tiled_matmul_auto(
-//             n, 1, m,
-//             a_buf, x_buf /* .a is colMjr */, y_buf, y_buf,
-//             m, 1, 1, 1,
-//             alpha, 1, beta,
-//             NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
-//             false, false,
-//             false, false, 0, WS
-//         );
-//     } else {
-//         tiled_matmul_auto(
-//             1, m, n,
-//             x_buf, a_buf /* .a is colMjr */, y_buf, y_buf,
-//             n, m, m, m,
-//             alpha, 1, beta,
-//             NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
-//             false, false,
-//             false, false, 0, WS
-//         );
-//     }
+    if (trans) {
+        tiled_matmul_auto(
+            n, 1, m,
+            a_buf, x_buf /* .a is colMjr */, y_buf, y_buf,
+            m, 1, 1, 1,
+            alpha, 1, beta,
+            NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+            false, false,
+            false, false, 0, WS
+        );
+    } else {
+        tiled_matmul_auto(
+            1, m, n,
+            x_buf, a_buf /* .a is colMjr */, y_buf, y_buf,
+            n, m, m, m,
+            alpha, 1, beta,
+            NO_ACTIVATION,  ACC_SCALE_IDENTITY,  0, false,
+            false, false,
+            false, false, 0, WS
+        );
+    }
 
-//     for (int i = 0; i < (trans?n:m); i++)
-//     {
-//         y[i * incy] = (double)y_buf[i];
-//     }
+    for (int i = 0; i < (trans?n:m); i++)
+    {
+        y[i * incy] = (double)y_buf[i];
+    }
 
-//     free(a_buf);
-//     free(x_buf);
-//     free(y_buf);
+    free(a_buf);
+    free(x_buf);
+    free(y_buf);
+    
+pthread_mutex_unlock(&gemmini_lock);
 
-// #endif
-// #else
+#endif
+#else
     (gemv[(int)trans])(m, n, 0, alpha, a, lda, x, incx, y, incy, buffer);
-// #endif
+#endif
 
 #ifdef SMP
   } else {
