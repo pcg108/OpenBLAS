@@ -671,6 +671,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 #if defined(GEMMINI_BACKEND)
 
 pthread_mutex_lock(&gemmini_lock);
+printf("[openblas] gemm lock\n");
 
 #if !defined(DOUBLE)
     gemmini_flush(0);
@@ -760,6 +761,7 @@ pthread_mutex_lock(&gemmini_lock);
     free(b_buf);
     free(c_buf);
 
+printf("[openblas] gemm unlock\n");
 pthread_mutex_unlock(&gemmini_lock);
 
 #endif
