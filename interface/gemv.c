@@ -272,10 +272,10 @@ void CNAME(enum CBLAS_ORDER order,
 
     int acquired = 0;
     do {
-      acquired = rr_acquire_single(1, 1); // acquire accelerator 1 (fp32 in RocketDualGemminiConfig), and set it to config register 1
+      acquired = rr_acquire_single(0, 0); // acquire accelerator 1 (fp32 in RocketDualGemminiConfig), and set it to config register 1
     } while (acquired == 0);
 
-    rr_set_opc(XCUSTOM_ACC, 1); // once the accelerator is acquired, route the command to accelerator 1 (the fp32 gemmini)
+    rr_set_opc(XCUSTOM_ACC, 0); // once the accelerator is acquired, route the command to accelerator 1 (the fp32 gemmini)
 
 #if !defined(DOUBLE)
     gemmini_flush(0);
@@ -341,7 +341,7 @@ void CNAME(enum CBLAS_ORDER order,
     free(x_buf);
     free(y_buf);
 
-    rr_release(1); // release the accelerator
+    rr_release(0); // release the accelerator
 
 #endif
 #else
