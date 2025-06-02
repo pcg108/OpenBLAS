@@ -223,6 +223,10 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
 #if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
 // #include "gemmini/rerocc.h"
+#include <semaphore.h>
+#include <fcntl.h> 
+#include <sys/stat.h> 
+#include <unistd.h>
 #endif
 
 #ifndef CBLAS
@@ -670,6 +674,13 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 //     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
 #if defined(GEMMINI_BACKEND)
 
+  sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
+  if (sem == SEM_FAILED) {
+    perror("sem_open failed");
+    return 1;
+  }
+  sem_wait(sem);
+
   // int acquired = 0;
   // do {
   //   acquired = rr_acquire_single(1, 1); // acquire accelerator 1 (fp32 in RocketDualGemminiConfig), and set it to config register 1
@@ -766,6 +777,8 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     free(c_buf);
 
     // rr_release(1); // release the accelerator
+    sem_post(sem);
+    sem_close(sem);
 
 #endif
 #else
