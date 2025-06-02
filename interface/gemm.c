@@ -670,7 +670,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 //     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
 #if defined(GEMMINI_BACKEND)
 
-  ENSURE_GEMMINI_MUTEX();
+  ENSURE_GEMMINI_SEMAPHORE();
 
   sem_wait(gemmini_sem);
 

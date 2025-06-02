@@ -270,7 +270,7 @@ void CNAME(enum CBLAS_ORDER order,
 
 #if defined(GEMMINI_BACKEND)
 
-    ENSURE_GEMMINI_MUTEX();
+    ENSURE_GEMMINI_SEMAPHORE();
     sem_wait(gemmini_sem);
 
     // int acquired = 0;
