@@ -281,6 +281,14 @@ if (USE_OPENMP)
   endif()
 endif()
 
+add_library(gemmini_semaphore gemmini/gemmini_semaphore.c)
+if(BUILD_STATIC_LIBS)
+    target_link_libraries(${OpenBLAS_LIBNAME}_static gemmini_semaphore)
+endif()
+if(BUILD_SHARED_LIBS)
+  target_link_libraries(${OpenBLAS_LIBNAME}_shared gemmini_semaphore)
+endif()
+
 # Seems that this hack doesn't required since macOS 11 Big Sur
 if (APPLE AND BUILD_SHARED_LIBS AND CMAKE_HOST_SYSTEM_VERSION VERSION_LESS 20)
   set (CMAKE_C_USE_RESPONSE_FILE_FOR_OBJECTS 1)
