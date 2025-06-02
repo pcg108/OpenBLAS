@@ -677,7 +677,6 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
   sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
   if (sem == SEM_FAILED) {
     perror("sem_open failed");
-    return 1;
   }
   sem_wait(sem);
 
