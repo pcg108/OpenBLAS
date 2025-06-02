@@ -227,6 +227,7 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
 #include <fcntl.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
+sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
 #endif
 
 #ifndef CBLAS
@@ -674,10 +675,10 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 //     __func__, args.m, args.n, args.k, args.lda, args.ldb, args.ldc, *(FLOAT *)(args.alpha), *(FLOAT *)(args.beta), transa, transb);
 #if defined(GEMMINI_BACKEND)
 
-  sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
-  if (sem == SEM_FAILED) {
-    perror("sem_open failed");
-  }
+  // sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
+  // if (sem == SEM_FAILED) {
+  //   perror("sem_open failed");
+  // }
   sem_wait(sem);
 
   // int acquired = 0;
@@ -777,7 +778,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
 
     // rr_release(1); // release the accelerator
     sem_post(sem);
-    sem_close(sem);
+    // sem_close(sem);
 
 #endif
 #else

@@ -101,6 +101,7 @@ static inline int get_gemv_optimal_nthreads(BLASLONG MN) {
 #include <fcntl.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
+sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
 #endif
 
 
@@ -274,10 +275,10 @@ void CNAME(enum CBLAS_ORDER order,
 
 #if defined(GEMMINI_BACKEND)
 
-    sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
-    if (sem == SEM_FAILED) {
-      perror("sem_open failed");
-    }
+    // sem_t *sem = sem_open("/gemmini_mutex", O_CREAT, 0666, 1);
+    // if (sem == SEM_FAILED) {
+    //   perror("sem_open failed");
+    // }
     sem_wait(sem);
 
     // int acquired = 0;
@@ -353,7 +354,7 @@ void CNAME(enum CBLAS_ORDER order,
 
     // rr_release(1); // release the accelerator
     sem_post(sem);
-    sem_close(sem);
+    // sem_close(sem);
 
 #endif
 #else
