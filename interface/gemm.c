@@ -223,6 +223,7 @@ static inline int get_gemm_optimal_nthreads(double MNK) {
 #if defined(GEMMINI_BACKEND)
 #include "gemmini/gemmini.h"
 #include "gemmini/gemmini_semaphore.h"
+#include "gemmini/rerocc.h"
 #endif
 
 #ifndef CBLAS
