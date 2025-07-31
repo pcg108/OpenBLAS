@@ -98,6 +98,7 @@ static inline int get_gemv_optimal_nthreads(BLASLONG MN) {
 #include "gemmini/gemmini.h"
 #include "gemmini/gemmini_semaphore.h"
 #include "gemmini/rerocc.h"
+#include "gemmini/mixed_precision.h"
 #endif
 
 
