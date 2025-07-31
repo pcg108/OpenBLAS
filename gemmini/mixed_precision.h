@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
-float to_half(float f) {
+static float to_half(float f) {
     uint32_t bits;
     memcpy(&bits, &f, sizeof(float));
 
