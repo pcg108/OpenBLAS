@@ -763,7 +763,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     {
         for (int j = 0; j < args.m; j++)
         {
-            ((IFLOAT*)args.c)[i * args.ldc + j] = (IFLOAT)c_buf[i * args.m + j];
+            ((IFLOAT*)args.c)[i * args.ldc + j] = to_half((IFLOAT)c_buf[i * args.m + j]);
         }
     }
 

@@ -27,7 +27,7 @@ float to_half(float f) {
     }
     else {  // Normal numbers
         // Convert exponent from fp32 bias (127) to fp16 bias (15)
-        int actual_exponent = static_cast<int>(exponent) - 127;
+        int actual_exponent = ((int)exponent) - 127;
         int fp16_exp_biased = actual_exponent + 15;
         
         // Handle overflow to infinity
