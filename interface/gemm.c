@@ -705,7 +705,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
         {
             for (int j = 0; j < args.k; j++)
             {
-                a_buf[i * args.k + j] = to_half((float)((IFLOAT*)args.a)[i * args.lda + j]);
+                a_buf[i * args.k + j] = (float)((IFLOAT*)args.a)[i * args.lda + j];
             }
         }
     }
@@ -715,7 +715,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
         {
             for (int j = 0; j < args.m; j++)
             {
-                a_buf[i * args.m + j] = to_half((float)((IFLOAT*)args.a)[i * args.lda + j]);
+                a_buf[i * args.m + j] = (float)((IFLOAT*)args.a)[i * args.lda + j];
             }
         }
     }
@@ -726,7 +726,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
         {
             for (int j = 0; j < args.n; j++) 
             {
-                b_buf[i * args.n + j] = to_half((float)((IFLOAT*)args.b)[i * args.ldb + j]);
+                b_buf[i * args.n + j] = (float)((IFLOAT*)args.b)[i * args.ldb + j];
             }
         }
     }
@@ -736,7 +736,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
         {
             for (int j = 0; j < args.k; j++) 
             {
-                b_buf[i * args.k + j] = to_half((float)((IFLOAT*)args.b)[i * args.ldb + j]);
+                b_buf[i * args.k + j] = (float)((IFLOAT*)args.b)[i * args.ldb + j];
             }
         }
     }
@@ -744,7 +744,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     {
         for (int j = 0; j < args.m; j++)
         {
-            c_buf[i * args.m + j] = to_half((float)((IFLOAT*)args.c)[i * args.ldc + j]);
+            c_buf[i * args.m + j] = (float)((IFLOAT*)args.c)[i * args.ldc + j];
         }
     }
 
@@ -763,7 +763,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
     {
         for (int j = 0; j < args.m; j++)
         {
-            ((IFLOAT*)args.c)[i * args.ldc + j] = to_half((IFLOAT)c_buf[i * args.m + j]);
+            ((IFLOAT*)args.c)[i * args.ldc + j] = (IFLOAT)c_buf[i * args.m + j];
         }
     }
 

@@ -301,16 +301,16 @@ void CNAME(enum CBLAS_ORDER order,
     {
         for (int j = 0; j < m; j++)
         {
-            a_buf[i * m + j] = to_half((float)a[i * lda + j]);
+            a_buf[i * m + j] = (float)a[i * lda + j];
         }
     }
     for (int i = 0; i < (trans? m : n); i++)
     {
-        x_buf[i] = to_half((float)x[i * incx]);
+        x_buf[i] = (float)x[i * incx];
     }
     for (int i = 0; i < (trans? n : m); i++)
     {
-        y_buf[i] = to_half((float)y[i * incy]);
+        y_buf[i] = (float)y[i * incy];
     }
 
     gemmini_flush(0);
